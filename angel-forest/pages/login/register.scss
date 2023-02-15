@@ -1,0 +1,112 @@
+page ,body{
+  // background-color: #f9f9f9!important;
+}
+.register{
+	padding: 0 10rpx;
+}
+.txt {
+	font-size: 32rpx;
+	font-weight: bold;
+	color: #333333;
+}
+.img-a {
+	width: 100%;
+	height: 402rpx;
+	background-image: url(../../static/img/loginImg/register.png);
+	background-size: 104% 100%;
+}
+.reg {
+	font-size: 28rpx;
+	color: #fff;
+	height: 90rpx;
+	line-height: 90rpx;
+	border-radius: 50rpx;
+	font-weight: bold;
+	background: #f5f6fa;
+	color: #000000;
+	text-align: center;
+	margin-top: 30rpx;
+}
+.otherMethod{
+	margin-top: 40rpx;
+	text-align: center;
+	color: #959595;
+}
+.buleColor{
+	color: #0079fe;
+}
+.MaT{
+	margin-top: 20rpx;
+}
+.fillBot{
+	margin-top: 20rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.fillBot .u-icon{
+	margin: 0 20rpx;
+}
+.login-view {
+	width: 90%;
+	margin: 0 5%;
+	position: relative;
+	margin-top: -11px;
+	background-color: #ffffff;
+	border-radius: 3%;
+	box-shadow: 0rpx 0 40rpx 0 rgba(0,0,0,0.5);
+	padding-bottom: 150rpx;
+}
+
+.t-login {
+	width: 600rpx;
+	margin: 0 auto;
+	font-size: 28rpx;
+	padding-top: 40rpx;
+}
+.yanzheng{
+	color: #2796f2;
+	height: 60rpx;
+	width: 200rpx;
+}
+.registerBtn {
+	margin-top: 50rpx;
+	font-size: 28rpx;
+	background: #2796f2;
+	color: #fff;
+	height: 90rpx;
+	line-height: 90rpx;
+	border-radius: 10rpx;
+	font-weight: bold;
+}
+
+.t-login input {
+	height: 90rpx;
+	line-height: 90rpx;
+	margin-bottom: 50rpx;
+	border-bottom: 1px solid #e9e9e9;
+	font-size: 28rpx;
+}
+
+.t-login .t-a {
+	position: relative;
+}
+
+
+.loginBtn{
+	margin-top: 40rpx;
+	margin-bottom: 60rpx;
+}
+/deep/ uni-page-wrapper{
+	background-color: #f9f9f9;
+}
+/deep/ .u-form-item{
+	height: 110rpx;
+	background-color: #ffffff;
+    border: 1rpx solid #dedede;
+    padding: 10rpx 14rpx!important;
+	border-radius: 0rpx ;
+}
+/deep/.u-form-item:nth-child(2),.u-form-item:nth-child(3),.u-form-item:nth-child(4){
+	margin-top: -2rpx;
+}
