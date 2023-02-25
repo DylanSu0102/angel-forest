@@ -4,6 +4,8 @@
 </style>
 <template>
 	<view class="register">
+	
+	<u-navbar title="注册" :autoBack="true"></u-navbar>
 		<view class="img-a"></view>
 		<view class="content"> 
 			<view class="t-login">
@@ -31,7 +33,7 @@
 					</view>
 					<view class="MaT">
 						<u-checkbox-group > 
-							<u-checkbox label="item.name" v-model="form.xieyi">同意<span @click="goUserAgreement">《用户服务协议》</span></u-checkbox>
+							<u-checkbox label="item.name" v-model="form.xieyi">同意《<span @click="goUserAgreement" style="color:#2796f4">用户服务协议</span>》</u-checkbox>
 						</u-checkbox-group>
 					</view>
 					<u-button class="registerBtn"  >注册</u-button>

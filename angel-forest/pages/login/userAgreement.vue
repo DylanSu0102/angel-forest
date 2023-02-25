@@ -1,6 +1,10 @@
 <template>
-	<view class="u-content">
-		<u-parse :html="content"></u-parse>
+	<view>
+		<u-navbar :autoBack="true" title="用户服务协议">
+		</u-navbar>
+		<view class="u-content">
+			<u-parse :html="content"></u-parse>
+		</view>
 	</view>
 </template>
 
@@ -10,7 +14,6 @@
 			return {
 				content: `
 					<view class="con" style="visibility: visible;">
-						<div style="font-size: 40rpx; font-weight:bold; text-align: center; line-height: 50px;">用户服务协议</div>
 					    <p style="font-size:16px;line-height:35px;font-weight:bold;">
 							<span >一、总则</span>
 						</p>

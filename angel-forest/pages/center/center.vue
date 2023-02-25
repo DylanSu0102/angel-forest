@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- #ifdef APP-PLUS -->
-		<u-navbar :is-back="false" title="　" :border-bottom="false">
+		<u-navbar :is-back="false" title="　" border-bottom="false">
 			<view class="u-flex u-row-right" style="width: 100%;">
 				<view class="scan u-flex u-row-center">
 					<u-icon name="scan" color="#969799" size="38" @click="scan"></u-icon>

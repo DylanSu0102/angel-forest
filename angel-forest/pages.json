@@ -19,10 +19,31 @@
 			}
 		},
 		{
+			"path": "pages/center/dynamic",
+			"style": {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+				"navigationBarTitleText": "动态"
+			}
+		},
+		{
 			"path": "pages/center/center",
 			"style": {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
-				"navigationBarTitleText": "我"
+				"navigationBarTitleText": "发布"
+			}
+		},
+		{
+			"path": "pages/center/dialogueList",
+			"style": {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+				"navigationBarTitleText": "聊天"
+			}
+		},
+		{
+			"path": "pages/center/me",
+			"style": {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+				"navigationBarTitleText": "我的"
 			}
 		},
 		{
@@ -62,6 +83,33 @@
 		    }
 		},
 		{
+		    "path" : "pages/release/index",
+		    "style" :                                                                                    
+		    {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+		        "navigationBarTitleText": "发布",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
+		    "path" : "pages/center/dialogueList",
+		    "style" :                                                                                    
+		    {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+		        "navigationBarTitleText": "聊天列表",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
+		    "path" : "pages/center/chat",
+		    "style" :                                                                                    
+		    {
+				// "navigationStyle": "custom" ,// 隐藏系统导航栏
+		        "navigationBarTitleText": "聊天",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
 		    "path" : "pages/login/problem",
 		    "style" :                                                                                    
 		    {
@@ -70,107 +118,14 @@
 		    }
 		},
 		{
-            "path" : "pages/profile/setting",
-            "style" :                                                                                    
-            {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-        },
-		{
-		    "path" : "pages/profile/profile",
+		    "path" : "pages/more/rewardMore",
 		    "style" :                                                                                    
 		    {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
-		        "navigationBarTitleText": "",
+		        "navigationBarTitleText": "赏金列表",
 		        "enablePullDownRefresh": false
 		    }
-		},
-		{
-            "path" : "pages/profile/password",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "修改密码",
-                "enablePullDownRefresh": false
-            }
-            
-        },
-		{
-            "path" : "pages/search/search",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "搜索",
-                "enablePullDownRefresh": false
-            }
-            
-        },
-		{
-		    "path" : "pages/location/location",
-		    "style": {
-		    	// "navigationStyle": "custom" ,// 隐藏系统导航栏
-		    	"navigationBarTitleText": "选择地址"
-		    }
-		    
 		}
-        ,{
-            "path" : "pages/notice/notice",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "通知",
-                "enablePullDownRefresh": false
-            }
-            
-        },
-		{
-		    "path" : "pages/profile/aboutMe",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "关于我",
-		        "enablePullDownRefresh": false,
-				"navigationStyle": "custom" // 隐藏系统导航栏
-		    }
-		    
-		},
-		{
-            "path" : "pages/search/searchList",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "房源列表",
-				"enablePullDownRefresh": true
-            }
-            
-        },
-		{
-            "path" : "pages/detail/detail",
-            "style" :                                                                                    
-            {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-                "navigationBarTitleText": "房源详情",
-                "enablePullDownRefresh": false
-            }
-            
-        },
-		{
-            "path" : "pages/detail/addHouse",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "新增房源",
-                "enablePullDownRefresh": false
-            }
-            
-        },
-		{
-            "path" : "pages/detail/preHouse",
-            "style" :                                                                                    
-            {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-                "navigationBarTitleText": "预增房源",
-                "enablePullDownRefresh": false
-            }
-        }
-		
-		
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -188,11 +143,27 @@
 	        "iconPath": "static/index.png",
 	        "selectedIconPath": "static/index-selected.png",
 	        "text": "首页"
-	    }, {
-	        "pagePath": "pages/center/center",
-	        "iconPath": "static/center.png",
-	        "selectedIconPath": "static/center-selected.png",
-	        "text": "我"
+	    },{
+	        "pagePath": "pages/center/dynamic",
+	        "iconPath": "static/dynamic.png",
+	        "selectedIconPath": "static/dynamic-selected.png",
+	        "text": "动态"
+	    },{
+	        "pagePath": "pages/release/index",
+	        "iconPath": "static/release.png",
+	        "selectedIconPath": "static/release-selected.png",
+	        "text": "发布"
+	    },{
+	        "pagePath": "pages/center/dialogueList",
+	        "iconPath": "static/dialogue.png",
+	        "selectedIconPath": "static/dialogue-selected.png",
+	        "text": "聊天"
+	    }, 
+		{
+	        "pagePath": "pages/center/me",
+	        "iconPath": "static/me.png",
+	        "selectedIconPath": "static/me-selected.png",
+	        "text": "我的"
 	    }]
 	},
 	"condition" : { //模式配置，仅开发期间生效

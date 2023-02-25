@@ -2,11 +2,11 @@ module.exports = {
   publicPath: './',
   devServer: {
     proxy: {
-      '/api': {
-        target: 'https://sourcebyte.cn',
+      '/mock': {
+        target: 'http://8.210.126.36:8080',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': '/api'
+          '^/mock': '/mock'
         }
       }
     }

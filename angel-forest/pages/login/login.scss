@@ -48,8 +48,8 @@ page {
 	margin-top: -11px;
 	background-color: #ffffff;
 	border-radius: 3%;
-	box-shadow: 0rpx 0 40rpx 0 rgba(0,0,0,0.5);
-	padding-bottom: 150rpx;
+	box-shadow: 0rpx 0 15rpx 0 rgba(0,0,0,0.5);
+	padding-bottom: 250rpx;
 }
 
 .t-login {
@@ -163,4 +163,7 @@ page {
 }
 /deep/.u-form-item:nth-child(2){
 	margin-top: -2rpx;
+}
+.regOrPwd{
+	flex: 1 !important;
 }

@@ -4,6 +4,7 @@
 </style>
 <template>
 	<view>
+		<u-navbar :is-back="false" title="登录"></u-navbar>
 		<u-toast ref="uToast" />
 		<view class="img-a"></view>
 		<view class="login-view">
@@ -18,10 +19,10 @@
 					<u-button class="loginBtn"  @click="login()">登录</u-button>
 				</u-form>
 				<u-row gutter="16">
-					<u-col span="6" text-align="center">
+					<u-col class="regOrPwd" span="6" text-align="center">
 						<view class="demo-layout bg-purple buleColor" @click="reg()">注册新用户</view>
 					</u-col>
-					<u-col span="6" text-align="center">
+					<u-col class="regOrPwd" span="6" text-align="center">
 						<view class="demo-layout bg-purple-light buleColor">找回密码</view>
 					</u-col>
 				</u-row>
@@ -41,45 +42,49 @@ export default {
 	data() {
 		return {
 			form: {
-				username: '',//'18720989281
-				password: '',//'123456',
+				username: '18720989281',//'18720989281
+				password: '123456',//'123456',
 			},
 		}
 	},
 	methods: {
 		login() {
-			console.log('this.form.username',this.form.username)
-			if(!this.form.username){
-				return this.$refs.uToast.show({
-					title: '手机号不能为空',
-					type: 'warning',
-				})
-			}
-			if(!this.$u.test.mobile(this.form.username)){
-				return this.$refs.uToast.show({
-					title: '手机号格式不正确',
-					type: 'warning',
-				})
-			}
-			if(!this.form.password){
-				return this.$refs.uToast.show({
-					title: '登录密码不能为空',
-					type: 'warning',
-				})
-			}
-			// 登录json参数，不同于表单参数
-			let url = "/api/thirdLogin";
-			this.$u.post(url,{
-				username: this.username,
-				password: this.password
-			}).then(data => {
-				// 登录成功初始化token与用户信息
-				this.$u.vuex('vuex_token', data.token);
-				this.$u.vuex('vuex_user', data.loginUser);
-				uni.switchTab({
-					url: '/pages/index/index'
-				})
-			});
+			
+			uni.switchTab({
+				url: '/pages/index/index'
+			})
+			// console.log('this.form.username',this.form.username)
+			// if(!this.form.username){
+			// 	return this.$refs.uToast.show({
+			// 		title: '手机号不能为空',
+			// 		type: 'warning',
+			// 	})
+			// }
+			// if(!this.$u.test.mobile(this.form.username)){
+			// 	return this.$refs.uToast.show({
+			// 		title: '手机号格式不正确',
+			// 		type: 'warning',
+			// 	})
+			// }
+			// if(!this.form.password){
+			// 	return this.$refs.uToast.show({
+			// 		title: '登录密码不能为空',
+			// 		type: 'warning',
+			// 	})
+			// }
+			// // 登录json参数，不同于表单参数
+			// let url = "/api/thirdLogin";
+			// this.$u.post(url,{
+			// 	username: this.username,
+			// 	password: this.password
+			// }).then(data => {
+			// 	// 登录成功初始化token与用户信息
+			// 	this.$u.vuex('vuex_token', data.token);
+			// 	this.$u.vuex('vuex_user', data.loginUser);
+			// 	uni.switchTab({
+			// 		url: '/pages/index/index'
+			// 	})
+			// });
 		},
 		reg(){
 			this.$u.route({

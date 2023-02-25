@@ -2,7 +2,7 @@
 	<view>
 		<u-navbar :is-back="false">
 			<view style="display: flex;justify-content: center;align-items: center;">
-				<view class="u-p-30"  @click="location">
+				<view class="u-p-30" style="font-size:35rpx"  ><!-- @click="location" -->
 					首页
 				</view>
 				<u-search placeholder="" v-model="keyword" input-align="center"  :show-action="false" :clearabled="true"
@@ -12,31 +12,42 @@
 				</view>
 			</view>
 		</u-navbar>
+		<!-- 轮播图 -->
 		<view>
 			<u-swiper :list="swiperList" height="400"></u-swiper>
 		</view>
+		<!-- 内容 -->
 		<view>
+			<!-- 一级 -->
 			<u-tabs :list="list" :is-scroll="false" height="120" active-color="#a4c8ff" inactive-color="#606266" show-bar :current="current" @change="change"></u-tabs>
-			<view class="pa">
-				<u-subsection :list="secondlist" height="200" mode="subsection" :current="secondcurNow" bgColor="#ff9900" @change="sectionChange"></u-subsection>
-			</view>	
-			<view class="thirdCon pa">
-				<u-subsection :list="thirdlist" :current="thirdcurNow" buttonColor="#a4c8ff" active-color="#ffffff"  bgColor="#ffffff" @change="thirdChange"></u-subsection>
-			</view>
-			<block v-for="(page,page_index) in 5" :key="page_index">
-				<list></list>
+			<block v-if="current === 0">
+				<!-- 二级 -->
+				<view class="pa" >
+					<u-subsection :list="secondlist" height="200" mode="subsection" :current="secondcurNow" bgColor="#ff9900" @change="sectionChange"></u-subsection>
+				</view>	
+				<!-- 三级 -->	
+				<view class="thirdCon pa" v-if="secondcurNow === 0">
+					<u-subsection :list="thirdlist" :current="thirdcurNow" buttonColor="#a4c8ff" active-color="#ffffff"  bgColor="#ffffff" @change="thirdChange"></u-subsection>
+				</view>
+			</block>
+			
+			<block>
+				<block v-if="current === 1">
+					<u-image :showLoading="true" :src="noImg" width="100%" height="280px"></u-image>
+				</block>
+				<block v-else>
+					<u-cell-group>
+						<u-cell-item :title="lookMoreName" value="查看更多" @click="navRewardMore(0)"></u-cell-item>
+					</u-cell-group>
+					<block v-for="(lista,page_index) in rewardList" :key="page_index">
+						<list :list="lista"></list>
+					</block>
+				</block>
 			</block>
 		</view>
-		<u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="findHouseList"></u-loadmore>
+		<u-loadmore bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="huntingListFun"></u-loadmore>
 		<u-back-top :scroll-top="scrollTop" top="1000"></u-back-top>
 		<u-no-network></u-no-network>
-		<view class="buttom">
-			<view class="loginType">
-				<view class="wechat item">
-					<view class="icon"><u-icon size="60" name="server-man" color="#999" @click="server"></u-icon></view>
-				</view>
-			</view>
-		</view>
 	</view>
 </template>
 
@@ -48,11 +59,11 @@
 		},
 		data() {
 			return {
+				noImg: '../../static/img/temp/comingOnline.png',
 				keyword: '',
 				pageNum: 1,
 				pageSize: 20,
 				scrollTop: 0,
-				houseList: [],
 				swiperList: [
 					{
 						image: '/static/img/index/swiper/u84.png',
@@ -77,43 +88,49 @@
 				],
 				// tab标签
 				list: [{
-					name: '赏金森林'
+					name: '赏金森林',
+					index: 0,
 				}, {
-					name: '月老森林'
+					name: '月老森林',
+					index: 1,
 				}, {
-					name: '孵化森林'
+					name: '孵化森林',
+					index: 2,
 				}],
 				current: 0,
 				secondlist: [
 					{
-						name: '赏金窗'
+						name: '赏金窗',
+						index: 0,
 					}, 
 					{
-						name: '猎金窗'
+						name: '猎金窗',
+						index: 1,
 					}
 				],
 				secondcurNow: 0,
 				thirdlist: [
 					{
-						name: '公司赏金'
+						name: '公司赏金',
+						index: 0,
 					}, 
 					{
-						name: '个人赏金'
+						name: '个人赏金',
+						index: 1,
 					}
 				],
 				thirdcurNow: 0,
 				loadStatus: 'loadmore',
 				flowList: [],
-				uvCode: uni.getStorageSync('uvCode')
+				uvCode: uni.getStorageSync('uvCode'),
+				huntingList:[],
+				rewardList:[],
+				lookMoreName: '公司赏金',
 			}
 		},
 		onLoad() {
-			uni.$on('findIndexHouseList', (obj) => {
-				// 获取数据
-				this.findHouseList(1);
-			})
-			// 获取数据
-			this.findHouseList();
+			this.huntingListFun();
+			this.rewardListFun()
 		},
 		onUnload() {
 			// 移除监听事件  
@@ -131,12 +148,12 @@
 		onReachBottom() {
 		    this.loadStatus = 'loading';
 		    // 获取数据
-			this.findHouseList()
+			this.huntingListFun()
 		},
 		// 下拉刷新
 		onPullDownRefresh() {
 			// 获取数据
-			this.findHouseList(1);
+			this.huntingListFun(1);
 			// 关闭刷新
 			uni.stopPullDownRefresh();
 		},
@@ -148,6 +165,19 @@
 			},
 			change(index) {
 				this.current = index;
+				const lookMoreName = ''
+				if(index === 0 && secondcurNow === 0 ){
+					if(thirdcurNow === 0){
+						lookMoreName = '公司赏金'
+					}else{
+						lookMoreName = '个人赏金'
+					}
+				} else if(index === 1){
+					lookMoreName = ''
+				}else{
+					lookMoreName = '孵化森林'
+				}
+				this.lookMoreName = lookMoreName
 			},
 			location(){
 				this.$u.route({
@@ -156,9 +186,17 @@
 			},
 			sectionChange(index) {
 				this.secondcurNow = index;
+				if(index){
+					this.lookMoreName = '猎金窗'
+				}
 			},
 			thirdChange(index) {
 				this.thirdcurNow = index;
+				if(index){
+					this.lookMoreName = '个人赏金'
+				}else{
+					this.lookMoreName = '公司赏金'
+				}
 			},
 			search(){
 				this.$u.route({
@@ -170,60 +208,25 @@
 					url: 'pages/notice/notice'
 				})
 			},
-			findHouseList(type = 0) {
-				if(type == 1){
-					this.pageNum = 1
-					this.flowList = []
-					this.$refs.uWaterfall.clear();
-				}
-				let url = "/api/houseApi/findHouseRoomList";
-				this.$u.get(url, {
-					pageNum: this.pageNum,
-					pageSize: this.pageSize,
-					orderByColumn: 'update_time,create_time',
-					isAsc: 'desc'
+			huntingListFun(){
+				this.$u.post('/hunting/list', {
+					pageNum: 1,
+					pageSize: 10,
 				}).then(result => {
-					const data = result.rows;
-					if(this.pageNum>1 && data.length < this.pageSize){
-						return this.loadStatus = 'nomore';
-					}
-					this.houseList = data;
-					for (let i = 0; i < this.houseList.length; i++) {
-					    // 先转成字符串再转成对象，避免数组对象引用导致数据混乱
-					    let item = this.houseList[i]
-						item.image = item.faceUrl
-						if(item.type == 0){
-							item.type = '整租'
-						}else if(item.type == 1){
-							item.type = '合租'
-						}
-						if(item.roomType == 1){
-							item.roomType = '主卧'
-						}else if(item.roomType == 2){
-							item.roomType = '次卧'
-						}else{
-							item.roomType = '未知'
-						}
-						
-						if(this.$u.test.isEmpty(item.houseNum)){
-							item.houseNum = ''
-						}
-						if(this.$u.test.isEmpty(item.houseHall)){
-							item.houseHall = ''
-						}
-						if(this.$u.test.isEmpty(item.toiletNum)){
-							item.toiletNum = ''
-						}
-						if(this.$u.test.isEmpty(item.floor)){
-							item.floor = ''
-						}else{
-							item.floor = item.floor + '层'
-						}
-					    this.flowList.push(item);
-					}
-					++ this.pageNum 
-					this.loadStatus = 'loadmore';
-				});
+					console.log('result',result);
+					this.huntingList = result.rows;
+				})
+			},
+			rewardListFun(){
+				let _this = this;
+				this.$u.post('/reward/list', {
+					pageNum: 1,
+					pageSize: 10,
+				}).then(result => {
+					console.log('result',result);
+					// result.rows.map(function(m){m.workType = _this.workType[m.workType]});
+					this.rewardList = result.rows;
+				})
 			},
 			checkUpdate(){
 				uni.getSystemInfo({
@@ -275,8 +278,13 @@
 					this.uvCode = code
 				});
 			},
-			server(){
-				window.open ('https://sourcebyte.cn')
+			navRewardMore(typeId) {	// 跳转到赏金更多页面
+			    this.$u.route({
+					url:'/pages/more/rewardMore',
+					params: {
+						type: typeId
+					}
+				});
 			}
 		}
 	}
