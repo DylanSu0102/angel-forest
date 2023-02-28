@@ -39,7 +39,7 @@
 					<u-cell-group>
 						<u-cell-item :title="lookMoreName" value="查看更多" @click="navRewardMore(0)"></u-cell-item>
 					</u-cell-group>
-					<block v-for="(lista,page_index) in rewardList" :key="page_index">
+					<block v-for="(lista, page_index) in nowList" :key="page_index">
 						<list :list="lista"></list>
 					</block>
 				</block>
@@ -123,14 +123,16 @@
 				loadStatus: 'loadmore',
 				flowList: [],
 				uvCode: uni.getStorageSync('uvCode'),
-				huntingList:[],
-				rewardList:[],
+				nowList: [],
+				huntingList: [],
+				hatchList: [],
+				rewardList: [],
+				rewardListTwo: [],
 				lookMoreName: '公司赏金',
 			}
 		},
 		onLoad() {
-			this.huntingListFun();
-			this.rewardListFun()
+			this.rewardListFun(0)
 		},
 		onUnload() {
 			// 移除监听事件  
@@ -165,19 +167,25 @@
 			},
 			change(index) {
 				this.current = index;
-				const lookMoreName = ''
-				if(index === 0 && secondcurNow === 0 ){
-					if(thirdcurNow === 0){
-						lookMoreName = '公司赏金'
+				console.log('index',index)
+				let lookMore = ''
+				if(index === 0 && this.secondcurNow === 0 ){
+					if(this.thirdcurNow === 0){
+						lookMore = '公司赏金'
 					}else{
-						lookMoreName = '个人赏金'
+						lookMore = '个人赏金'
 					}
+					this.rewardListFun(this.thirdcurNow);
+				} else if(index === 0 && this.secondcurNow === 1 ){
+					lookMore = '猎金窗'
+					this.huntingListFun();
 				} else if(index === 1){
-					lookMoreName = ''
-				}else{
-					lookMoreName = '孵化森林'
+					lookMore = ''
+				}else if(index === 2){
+					lookMore = '孵化森林'
+					this.hatchListFun();
 				}
-				this.lookMoreName = lookMoreName
+				this.lookMoreName = lookMore
 			},
 			location(){
 				this.$u.route({
@@ -188,14 +196,23 @@
 				this.secondcurNow = index;
 				if(index){
 					this.lookMoreName = '猎金窗'
+					this.huntingListFun();
+				}else{
+					if(this.thirdcurNow === 0){
+						this.lookMoreName = '公司赏金'
+					}else{
+						this.lookMoreName = '个人赏金'
+					}
 				}
 			},
 			thirdChange(index) {
 				this.thirdcurNow = index;
 				if(index){
 					this.lookMoreName = '个人赏金'
+					this.rewardListFun(1);
 				}else{
 					this.lookMoreName = '公司赏金'
+					this.rewardListFun(0);
 				}
 			},
 			search(){
@@ -209,24 +226,68 @@
 				})
 			},
 			huntingListFun(){
-				this.$u.post('/hunting/list', {
-					pageNum: 1,
-					pageSize: 10,
+				if(this.huntingList.length > 0 ){
+					this.nowList = this.huntingList;
+				} else {
+					this.$u.post('/hunting/list', {
+						pageNum: 1,
+						pageSize: 10,
+					}).then(result => {
+						// console.log('result',result);
+						this.huntingList = result.rows;
+						this.nowList = result.rows;
+					})
+				}
+			},
+			hatchListFun(){
+				let pageNum = 1;
+				let pageSize = 10;
+				if(this.hatchList.length > 0 ){
+					this.nowList = this.hatchList;
+				} else {
+					this.$u.post(`/hatch/list?pageNum=${pageNum}&pageSize=${pageSize}`, {
+						pageNum: 1,
+						pageSize: 10,
+					}).then(result => {
+						this.hatchList = result.rows;
+						this.nowList = result.rows;
+					})
+				}
+			},
+			rewardListFunAll(type){
+				let pageNum = 1;
+				let pageSize = 10;
+				// '
+				this.$u.post(`/reward/list?pageNum=${pageNum}&pageSize=${pageSize}`, {
+					type: type,
 				}).then(result => {
-					console.log('result',result);
-					this.huntingList = result.rows;
+					// console.log('result',result);
+					// result.rows.map(function(m){m.workType = _this.workType[m.workType]});
+					if(type){
+						this.rewardListTwo = result.rows;
+						this.nowList = result.rows;
+					} else {
+						this.rewardList = result.rows;
+						this.nowList = result.rows;
+					}
 				})
 			},
-			rewardListFun(){
+			rewardListFun(type){
 				let _this = this;
-				this.$u.post('/reward/list', {
-					pageNum: 1,
-					pageSize: 10,
-				}).then(result => {
-					console.log('result',result);
-					// result.rows.map(function(m){m.workType = _this.workType[m.workType]});
-					this.rewardList = result.rows;
-				})
+				if(type){
+					if(this.rewardListTwo.length > 0 ){
+						this.nowList = this.rewardListTwo;
+					} else {
+						this.rewardListFunAll(type)
+					}
+				}else{
+					if(this.rewardList.length > 0 ){
+						this.nowList = this.rewardList;
+					} else {
+						this.rewardListFunAll(type)
+					}
+				}
+				
 			},
 			checkUpdate(){
 				uni.getSystemInfo({

@@ -5,6 +5,8 @@
 		<view v-for="(item, index) in contactsList" :key="index" @click="navToDetailPage(item)" style="margin-top: 20rpx;">
 			<!-- 消息组件 -->
 			<view style="margin-left: 25rpx;">
+				<!-- <image :src="item.image" style="width: 125rpx;height: 125rpx;border-radius: 50%;" mode="aspectFill">
+				</image> -->
 				<image :src="item.image" style="width: 125rpx;height: 125rpx;border-radius: 50%;" mode="aspectFill">
 				</image>
 			</view>
@@ -12,10 +14,10 @@
 				<text>{{item.contactsName}}</text>
 			</view>
 			<view style="margin-top: -45rpx;margin-left: 560rpx;">
-				<text style="color: #515151;">{{item.time}}</text>
+				<text style="color: #515151;">{{item.createTime}}</text>
 			</view>
 			<view style="margin-top: 30rpx;margin-left: 170rpx;">
-				<text style="color: #515151;">{{item.news}}</text>
+				<text style="color: #515151;">{{item.lastMessage}}</text>
 			</view>
 			<view style="margin-top: -50rpx;margin-left: 680rpx;width:20rpx;height:35rpx">
 				<u-badge numberType="overflow" shape="circle" max="99" :count="item.unreadCount" type="error"
@@ -65,16 +67,31 @@
 			uni.stopPullDownRefresh();
 		},
 		methods: {
+			formatDate(dateStr){
+				if(dateStr==null){
+					return null;
+				}
+				var date = new Date(dateStr);
+				 var year = date.getFullYear();    //  返回的是年份
+				 var month = date.getMonth() + 1;  //  返回的月份上个月的月份，记得+1才是当月
+				 var dates = date.getDate();  
+				 if(month<10)month="0"+month;
+				 if(date<10)date="0"+date;
+				 var time=year + "-" + month + "-" + dates;
+				 return time;
+			},
 			navToDetailPage(item){
 				console.log("item",item)
 			},
 			contactsListFun(){
+				var _this = this;
 				this.$u.get('/im/contactsList', {
 					pageNum: 1,
 					pageSize: 10,
-					userId:'123'
+					userId:'123'//TODO 获取当前登录人
 				}).then(result => {
 					console.log('result',result);
+					result.rows.map(function(m){m.createTime = _this.formatDate(m.createTime)})
 					this.contactsList = result.rows;
 				})
 			}

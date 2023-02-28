@@ -110,10 +110,18 @@
 		    }
 		},
 		{
-		    "path" : "pages/login/problem",
+		    "path" : "pages/detail/companyDetail",
 		    "style" :                                                                                    
 		    {
-		        "navigationBarTitleText": "常见问题",
+		        "navigationBarTitleText": "详情",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
+		    "path" : "pages/angel/index",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "微股东",
 		        "enablePullDownRefresh": false
 		    }
 		},

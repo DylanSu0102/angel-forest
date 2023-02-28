@@ -1,17 +1,17 @@
 <template>
-	<view class="list">
-		<view class="listTop">
+	<view class="list" >
+		<view class="listTop" >
 			<view>
-				<u-image width="100%" height="300rpx" class="listImg" src="../../static/qiandao.png"></u-image>
+				<u-image width="100%" height="300rpx" class="listImg" :src="list.materialList[0].url"></u-image>
 			</view>
 			<view class="listTopRight">
 				<view class="list_title">
-					<text>{{list.name}}</text>
+					<text @click="goDetail()">{{list.name}}</text>
 					<text class="onLine">在线沟通</text>
 				</view>
 				<view class="list_titleBot">
 					<view>
-						<u-icon :label="list.contactName" size="40" label-size="12" name="https://cdn.uviewui.com/uview/example/button.png"></u-icon>
+						<u-icon :label="list.contactName" size="40" label-size="12" :name="list.avatarUrl"></u-icon>
 					</view>
 					<view>
 						<u-icon :label="list.contactPhone" size="40" label-size="12" name="../../static/phone.png" @click="makeCall(list.contactPhone)">
@@ -68,6 +68,12 @@
 		  	uni.makePhoneCall({ 
 		  		phoneNumber: phoneCode
 		  	});
+		  },
+		  goDetail(){
+			  this.$u.route({
+			  	url: 'pages/detail/companyDetail'
+			  })
+			  
 		  }
 	  }
 	}
