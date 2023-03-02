@@ -121,7 +121,7 @@
         "template" : "template.h5.html",
         "router" : {
             "mode" : "hash",
-            "base" : "/house/"
+            "base" : "/angel/"
         },
         "title" : "天使VIP",
         "domain" : "8.136.213.245",
