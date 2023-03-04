@@ -142,6 +142,24 @@
 		        "navigationBarTitleText": "个人信息",
 		        "enablePullDownRefresh": false
 		    }
+		},
+		{
+		    "path" : "pages/detail/myWebView",
+		    "style" :                                                                                    
+		    {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+		        "navigationBarTitleText": "外部链接",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
+		    "path" : "pages/center/editUserInfo",
+		    "style" :                                                                                    
+		    {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+		        "navigationBarTitleText": "修改资料",
+		        "enablePullDownRefresh": false
+		    }
 		}
     ],
 	"globalStyle": {

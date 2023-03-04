@@ -109,6 +109,40 @@
 					this.$emit('heights', data.height);
 				}).exec();
 			},
+			//切换音频
+			records() {
+				//切换的时候关闭其他界面
+				this.ismore = false
+				this.isemoji = false
+				//切换高度
+				setTimeout(() => {
+					this.getElementHeight();
+				}, 10)
+				if (this.isrecord) {
+					this.isrecord = false;
+					this.toc = require("static/index-selected.png");
+				} else {
+					this.isrecord = true;
+					this.toc = require("static/index-selected.png");
+				}
+			},
+			// 表情
+			emoji() {
+				this.isemoji = !this.isemoji;
+				//切换的时候关闭其功能
+				this.ismore = false
+				this.isrecord = false;
+				this.toc = require("static/index-selected.png");
+				//切换高度
+				setTimeout(() => {
+					this.getElementHeight();
+				}, 10)
+			},
+			//接收表情
+			emotion(e) {
+				console.log(e),
+					this.msg = this.msg + e
+			},
 			//文字发送
 			inputs(e) {
 				var chatm = e.detail.value;
@@ -121,14 +155,14 @@
 				// 	this.msg = '';
 				// }, 0)
 				// }
-			
+
 				if (pos != -1 && chatm.length > 1) {
 					this.msg = chatm
 					console.log('thismsg',this.msg)
 					// 0为表情和文字
 					// this.send(this.msg, 0)
 				}
-			
+
 			},
 			// 输入框聚焦
 			focus() {
@@ -140,184 +174,142 @@
 				}, 10)
 			},
 			sendMessage(){
+				console.log('this.msg',this.msg)
+				this.send(this.msg, 0)
+			},
+			// 表情内发送
+			emojiSend() {
+				// if (this.msg.length > 0) {
+				// 	this.$emit('inputs', this.msg);
+				// 	setTimeout(() => {
+				// 		this.msg = '';
+				// 	}, 0)
+				// }
+
+				if (this.msg.length > 0) {
+					//0为表情和文字
+					this.send(this.msg, 0)
+				}
+			},
+			// 表格退格
+			emojiBack() {
+				if (this.msg.length > 0) {
+					this.msg = this.msg.substring(0, this.msg.length - 1);
+				}
+			},
+			//更多功能
+			more() {
+				this.ismore = !this.ismore;
+				//切换的时候关闭其他界面
+				this.isemoji = false
+				this.isrecord = false;
+				this.toc = require("static/index-selected.png");
+				setTimeout(() => {
+					this.getElementHeight();
+				}, 10)
+			},
+			//图片发送
+			sendImg(e) {
+				let count = 9;
+				if (e == 'album') {
+					count = 9;
+				} else {
+					count = 1;
+				}
+				uni.chooseImage({
+					count: count, //默认9
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sourceType: [e], //从相册选择
+					// success: function (res) { //用function的方式会找不到send方法
+					success: (res) => {
+						console.log(JSON.stringify(res.tempFilePaths));
+						const filePaths = res.tempFilePaths;
+						for (let i = 0; i < filePaths.length; i++) {
+							this.send(filePaths[i], 1)
+						}
+					}
+				});
+			},
+			//音频处理
+			//开始录音
+			touchstart(e) {
+				console.log("开始录音")
+				console.log("点击产生数据", e)
+				this.pageY = e.changedTouches[0].pageY;
+				this.voicebg = true;
+				let i = 1;
+				this.timer = setInterval(() => {
+					this.vlength = i;
+					i++;
+					console.log("计时器开始工作,第几秒", i)
+					//结束计时
+					if (i > 60) {
+						clearInterval(this.timer);
+						this.touchend();
+					}
+				}, 1000)
+				recorderManager.start();
+			},
+			//删除录音
+			touchmove(e) {
+				// console.log("滑动到的y轴高度：",e.changedTouches[0].pageY);
+				if (this.pageY - e.changedTouches[0].pageY > 100) {
+					// 关闭录音界面
+					this.voicebg = false;
+				}
+			},
+			// 结束录音
+			touchend() {
+				console.log("结束录音")
+				clearInterval(this.timer);
+				recorderManager.stop();
+				// recorderManager.onStop(function(res) {
+				recorderManager.onStop((res) => {
+					let data = {
+						voice: res.tempFilePath,
+						time: this.vlength
+					}
+					if (this.voicebg) {
+						this.send(data, 2);
+					}
+					// //时长归位
+					this.vlength = 0;
+					this.voicebg = false;
+					console.log('recorder stop' + JSON.stringify(res));
+					// self.voicePath = res.tempFilePath;
+				});
+			},
+			//获取位置
+			choseLocation() {
+				uni.chooseLocation({
+					// success: function(res) {
+					success: res => {
+						let data = {
+							name: res.name,
+							address: res.address,
+							latitude: res.latitude,
+							longitude: res.longitude
+						}
+						this.send(data, 3);
+						// console.log('位置名称：' + res.name);
+						// console.log('详细地址：' + res.address);
+						// console.log('纬度：' + res.latitude);
+						// console.log('经度：' + res.longitude);
+						
+					}
+				});
+			},
+			//发送
+			send(msg, type) {
 				let date = {
-					message: this.msg,
-					type: 0
+					message: msg,
+					type: type
 				}
 				this.$emit('inputs', date);
 				setTimeout(() => {
 					this.msg = '';
 				}, 0)
-			},
-			//发送
-			// send(msg, type) {
-			// 	let date = {
-			// 		message: msg,
-			// 		type: type
-			// 	}
-			// 	this.$emit('inputs', date);
-			// 	setTimeout(() => {
-			// 		this.msg = '';
-			// 	}, 0)
-			// }
-			// //切换音频
-			// records() {
-			// 	//切换的时候关闭其他界面
-			// 	this.ismore = false
-			// 	this.isemoji = false
-			// 	//切换高度
-			// 	setTimeout(() => {
-			// 		this.getElementHeight();
-			// 	}, 10)
-			// 	if (this.isrecord) {
-			// 		this.isrecord = false;
-			// 		this.toc = require("static/index-selected.png");
-			// 	} else {
-			// 		this.isrecord = true;
-			// 		this.toc = require("static/index-selected.png");
-			// 	}
-			// },
-			// // 表情
-			// emoji() {
-			// 	this.isemoji = !this.isemoji;
-			// 	//切换的时候关闭其功能
-			// 	this.ismore = false
-			// 	this.isrecord = false;
-			// 	this.toc = require("static/index-selected.png");
-			// 	//切换高度
-			// 	setTimeout(() => {
-			// 		this.getElementHeight();
-			// 	}, 10)
-			// },
-			// //接收表情
-			// emotion(e) {
-			// 	console.log(e),
-			// 		this.msg = this.msg + e
-			// },
-			
-			// // 表情内发送
-			// emojiSend() {
-			// 	// if (this.msg.length > 0) {
-			// 	// 	this.$emit('inputs', this.msg);
-			// 	// 	setTimeout(() => {
-			// 	// 		this.msg = '';
-			// 	// 	}, 0)
-			// 	// }
-
-			// 	if (this.msg.length > 0) {
-			// 		//0为表情和文字
-			// 		this.send(this.msg, 0)
-			// 	}
-			// },
-			// // 表格退格
-			// emojiBack() {
-			// 	if (this.msg.length > 0) {
-			// 		this.msg = this.msg.substring(0, this.msg.length - 1);
-			// 	}
-			// },
-			// //更多功能
-			// more() {
-			// 	this.ismore = !this.ismore;
-			// 	//切换的时候关闭其他界面
-			// 	this.isemoji = false
-			// 	this.isrecord = false;
-			// 	this.toc = require("static/index-selected.png");
-			// 	setTimeout(() => {
-			// 		this.getElementHeight();
-			// 	}, 10)
-			// },
-			// //图片发送
-			// sendImg(e) {
-			// 	let count = 9;
-			// 	if (e == 'album') {
-			// 		count = 9;
-			// 	} else {
-			// 		count = 1;
-			// 	}
-			// 	uni.chooseImage({
-			// 		count: count, //默认9
-			// 		sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-			// 		sourceType: [e], //从相册选择
-			// 		// success: function (res) { //用function的方式会找不到send方法
-			// 		success: (res) => {
-			// 			console.log(JSON.stringify(res.tempFilePaths));
-			// 			const filePaths = res.tempFilePaths;
-			// 			for (let i = 0; i < filePaths.length; i++) {
-			// 				this.send(filePaths[i], 1)
-			// 			}
-			// 		}
-			// 	});
-			// },
-			// //音频处理
-			// //开始录音
-			// touchstart(e) {
-			// 	console.log("开始录音")
-			// 	console.log("点击产生数据", e)
-			// 	this.pageY = e.changedTouches[0].pageY;
-			// 	this.voicebg = true;
-			// 	let i = 1;
-			// 	this.timer = setInterval(() => {
-			// 		this.vlength = i;
-			// 		i++;
-			// 		console.log("计时器开始工作,第几秒", i)
-			// 		//结束计时
-			// 		if (i > 60) {
-			// 			clearInterval(this.timer);
-			// 			this.touchend();
-			// 		}
-			// 	}, 1000)
-			// 	recorderManager.start();
-			// },
-			// //删除录音
-			// touchmove(e) {
-			// 	// console.log("滑动到的y轴高度：",e.changedTouches[0].pageY);
-			// 	if (this.pageY - e.changedTouches[0].pageY > 100) {
-			// 		// 关闭录音界面
-			// 		this.voicebg = false;
-			// 	}
-			// },
-			// // 结束录音
-			// touchend() {
-			// 	console.log("结束录音")
-			// 	clearInterval(this.timer);
-			// 	recorderManager.stop();
-			// 	// recorderManager.onStop(function(res) {
-			// 	recorderManager.onStop((res) => {
-			// 		let data = {
-			// 			voice: res.tempFilePath,
-			// 			time: this.vlength
-			// 		}
-			// 		if (this.voicebg) {
-			// 			this.send(data, 2);
-			// 		}
-			// 		// //时长归位
-			// 		this.vlength = 0;
-			// 		this.voicebg = false;
-			// 		console.log('recorder stop' + JSON.stringify(res));
-			// 		// self.voicePath = res.tempFilePath;
-			// 	});
-			// },
-			// //获取位置
-			// choseLocation() {
-			// 	uni.chooseLocation({
-			// 		// success: function(res) {
-			// 		success: res => {
-			// 			let data = {
-			// 				name: res.name,
-			// 				address: res.address,
-			// 				latitude: res.latitude,
-			// 				longitude: res.longitude
-			// 			}
-			// 			this.send(data, 3);
-			// 			// console.log('位置名称：' + res.name);
-			// 			// console.log('详细地址：' + res.address);
-			// 			// console.log('纬度：' + res.latitude);
-			// 			// console.log('经度：' + res.longitude);
-						
-			// 		}
-			// 	});
-			// },
-			
+			}
 		}
 	};
 </script>

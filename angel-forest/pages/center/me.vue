@@ -16,7 +16,7 @@
 					</view>
 				</view>
 				<view>
-					<u-icon class="settings" name="setting-fill" color="#999999" size="40"></u-icon>
+					<u-icon class="settings" name="setting-fill" color="#999999" size="40" @click="goEditUser()"></u-icon>
 				</view>
 			</view>
 		</view>
@@ -32,13 +32,14 @@
 		<u-cell-group>
 			<u-cell-item icon="home" title="个人信息" :arrow="true" @click="goMeMeansPag()"></u-cell-item>
 			<u-cell-item icon="rmb-circle" title="我的资产" :arrow="true"></u-cell-item>
-			<u-cell-item icon="bookmark" title="天使联盟" :arrow="true"></u-cell-item>
+			<u-cell-item icon="bookmark" title="天使联盟" :arrow="true" @click="gotoOutsideUrl('https://tssenlin.com/#/?address=0x539ad377fa7a9704827de43e64e2d2b822b91d70')"></u-cell-item>
 			<u-cell-item icon="checkmark-circle" title="我的发布" :arrow="true"></u-cell-item>
 			<u-cell-item icon="car" title="分销中心" :arrow="true"></u-cell-item>
 			<u-cell-item icon="star" title="我的收藏" :arrow="true"></u-cell-item>
 			<u-cell-item icon="level" title="我的VIP" :arrow="true"></u-cell-item>
 		</u-cell-group>
-		<u-button class="exitLoginBtn" :ripple="true" ripple-bg-color="#b7ccf3" @click="exitLogin()" type="primary">退出账号</u-button>
+		<u-action-sheet :list="actionSheetlist" v-model="actionSheetshow" :tips="actionSheetTips" :cancel-btn="true" @click="exitLogin"></u-action-sheet>
+		<u-button class="exitLoginBtn" :ripple="true" ripple-bg-color="#b7ccf3" @click="actionSheetshow = true" type="primary">退出账号</u-button>
 	</view>
 </template>
 
@@ -49,6 +50,17 @@ export default {
 			avatarUrl: '',
 			nickName:'',
 			phone:'',
+			actionSheetTips: {
+				text: '确定要退出当前账号？',
+				color: '#909399',
+				fontSize: 26
+			},
+			actionSheetlist: [{
+				text: '退出登录',
+				color: '#F95E5A',
+				fontSize: 28
+			}],
+			actionSheetshow: false
 		};
 	},
 	onLoad() {
@@ -67,6 +79,20 @@ export default {
 		},
 		goMeMeansPag(){
 			this.$u.route('/pages/center/meMeans');
+		},
+		goEditUser(){
+			this.$u.route('/pages/center/editUserInfo');
+		},
+		//跳转外部链接
+		gotoOutsideUrl(href){
+			this.$u.route('/pages/detail/myWebView?url='+href);
+		},
+		exitLogin(index){
+			if(index==0){
+				this.$u.route('/pages/login/login');
+			}else{
+				return false;
+			}
 		}
 	}
 };

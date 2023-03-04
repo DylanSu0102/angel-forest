@@ -1,16 +1,6 @@
 <template>
 	<view>
 		<u-navbar :is-back="true" title="个人信息"></u-navbar>
-		<!-- 
-		<u-row gutter="12" justify="center" class="myVipContent">
-			<u-col span="5" class="myVip myVipIcon">
-				<u-image width="60rpx" height="60rpx" src="../../static/myVip.png"></u-image>
-				<text style="font-size:25rpx;font-weight:normal;color:#2979ff">天使VIP</text>
-			</u-col>
-			<u-col span="6" class="myVip myVipOpen">
-				<text style="font-size:25rpx;font-weight:normal;color:#2979ff">立即开通</text>
-			</u-col>
-		</u-row> -->
 		<view class="userInfo">
 			<u-cell-group>
 				<u-cell-item icon="edit-pen" title="昵称" :arrow="false" :value="this.userInfo.nickName"></u-cell-item>
@@ -55,9 +45,6 @@ export default {
 				let resultData = result.data;
 				this.area = (resultData.province==null?"":resultData.province)+(resultData.city==null?"":resultData.city)+(resultData.area==null?"":resultData.area);
 			})
-		},
-		goMeMeansPag(){
-			this.$u.route('/pages/center/meMeans');
 		}
 	}
 };

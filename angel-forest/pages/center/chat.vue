@@ -76,132 +76,7 @@
 			return {
 				friendName: "xpq",
 				srcLogo:'http://demo.rageframe.com/attachment/images/2021/11/02/image_1635838346_MH3eD7HX.jpeg',
-				msg: [{
-						"sendName": "xpq",
-						"receviceName": "゛时光い",
-						"sendText": {
-							"address": "湖南省岳阳市湘阴县新世纪大道",
-							"latitude": 28.68925,
-							"longitude": 112.90917,
-							"name": "湘阴县政府(新世纪大道北)",
-						},
-						"createTime": "2022-01-06 12:40:12",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 3
-					}, {
-						"sendName": "゛时光い",
-						"receviceName": "xpq",
-						"sendText": {
-							"voice": "时光匆匆流过",
-							"time": 2 //秒
-						},
-						"createTime": "2022-01-06 12:22:12",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 2
-					}, {
-						"sendName": "xpq",
-						"receviceName": "゛时光い",
-						"sendText": {
-							"voice": "谢谢你",
-							"time": 60 //秒
-						},
-						"createTime": "2022-01-06 12:00:12",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 2
-					}, {
-						"sendName": "゛时光い",
-						"receviceName": "xpq",
-						"sendText": "这是第九条未读消息",
-						"createTime": "2022-01-03 12:22:12",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 0
-					},
-					{
-						"sendName": "゛时光い",
-						"receviceName": "xpq",
-						"sendText": "这是第八条未读消息",
-						"createTime": "2022-01-02 12:22:07",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 0
-					},
-					{
-						"sendName": "xpq",
-						"receviceName": "xpq",
-						"sendText": "这是第七条未读消息",
-						"createTime": "2021-12-19 12:22:03",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 0
-					},
-					{
-						"sendName": "゛时光い",
-						"receviceName": "xpq",
-						"sendText": "这是第六条未读消息",
-						"createTime": "2021-12-19 12:21:58",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 0
-					},
-					{
-						"sendName": "゛时光い",
-						"receviceName": "xpq",
-						"sendText": "http://demo.rageframe.com/attachment/images/2021/11/18/image_1637224530_diIlZlmm.jpeg",
-						"createTime": "2021-12-19 12:21:54",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 1
-					},
-					{
-						"sendName": "xpq",
-						"receviceName": "゛时光い",
-						"sendText": "http://demo2.rageframe.com/attachment/images/2021/09/01/image_1630483477_N03W37zs.jpg",
-						"createTime": "2021-12-19 12:21:48",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 1
-					},
-					{
-						"sendName": "゛时光い",
-						"receviceName": "xpq",
-						"sendText": "这是第三条未读消息",
-						"createTime": "2021-12-19 12:21:42",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 0
-					},
-					{
-						"sendName": "゛时光い",
-						"receviceName": "xpq",
-						"sendText": "这是第二条未读消息",
-						"createTime": "2021-12-19 12:21:33",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 0
-					},
-					{
-						"sendName": "゛时光い",
-						"receviceName": "xpq",
-						"sendText": "http://demo2.rageframe.com/attachment/images/2021/09/01/image_1630483477_N03W37zs.jpg",
-						"createTime": "2021-12-19 11:02:18",
-						"updateTime": null,
-						"chatmState": 1,
-						"TextType": 1
-					},
-					{
-						"sendName": "゛时光い",
-						"receviceName": "xpq",
-						"sendText": "爱你啊",
-						"createTime": "2021-12-18 20:37:03",
-						"updateTime": null,
-						"chatmState": 0,
-						"TextType": 0
-					}
-				],
+				msg: [],
 				// 反转数据接收
 				unshiftmsg: [],
 				imgMsg: [],
@@ -213,6 +88,7 @@
 		onShow() {
 			console.log("$router",this.$route.query)
 			this.contactsListFun(this.$route.query)
+			this.chatInit()  //socket相关操作
 			// // 数组倒叙 主要是应对后端传过来的数据
 			// for (var i = 0; i < this.msg.length; i++) {
 			// 	//时间间隔处理
@@ -238,6 +114,63 @@
 			submit,
 		},
 		methods: {
+			chatInit(){
+				uni.request({
+					url: `/ws://8.210.126.36:8080/websocket/${this.$store.state.vuex_user}`,  //此接口返回socket请求地址
+					method: 'GET',
+					success: res => {
+						if(res.data.code==200){
+							let socketlink=null
+							if(this.userToken){  //已登录，携带token
+								socketlink=`${res.data.msg}?token=${this.$store.state.vuex_token}`
+							}else{  //未登录
+								socketlink=res.data.msg
+							}
+							this.commentList=[]  //创建新的socket连接前先清除之前的实时聊天记录
+							uni.closeSocket()  //创建新的socket连接前确保旧的已关闭
+							//创建一个socket连接
+							uni.connectSocket({
+								url:socketlink,
+								success: res=>{}
+							})
+							//监听socket打开
+							uni.onSocketOpen(()=>{
+								this.isSocketOpen=true
+								console.log('WebSocket连接已打开！');
+							})
+							//监听socket关闭
+							uni.onSocketClose(()=>{
+								this.isSocketOpen=false
+								console.log('WebSocket连接已关闭！');
+							})
+							//监听socket错误
+							uni.onSocketError(()=>{
+								this.isSocketOpen=false
+								console.log('WebSocket连接打开失败');
+							})
+							//监听socket消息
+							uni.onSocketMessage((res)=>{
+								let infos=JSON.parse(res.data)
+								if(infos.cadmin!=5){
+									this.commentList=this.commentList.concat(infos)  //获取实时聊天内容信息
+								}
+							})
+							//先确保清除了之前的心跳定时器
+							clearInterval(this.pingpangTimes)
+							//每过一段时间发送一次心跳，发送Ping,服务器会反馈pong，这样操作以保持socket一直是连接状态，防止断开连接，心跳停止
+							this.pingpangTimes=setInterval(()=>{
+								uni.sendSocketMessage({
+									data: "ping",
+									success:()=>{},
+									fail:()=>{
+										this.isSocketOpen=false
+									}
+								});
+							},60000)
+						}
+					},
+				});
+			},
 			contactsListFun(params){
 				console.log('this.$store.state',this.$store.state)
 				console.log('store',store.state)
@@ -305,6 +238,7 @@
 			},
 			//接受输入内容
 			inputs(e) {
+				console.log('e===',e)
 				//时间间隔处理
 				let data = {
 					"sendName": "゛时光い",
