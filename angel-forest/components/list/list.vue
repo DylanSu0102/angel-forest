@@ -2,7 +2,7 @@
 	<view class="list" >
 		<view class="listTop" >
 			<view>
-				<u-image width="100%" height="300rpx" class="listImg" :src="list.materialList[0].url"></u-image>
+				<u-image width="100%" height="300rpx" class="listImg" :src="this.filesServiceUrl+list.materialList[0].url"></u-image>
 			</view>
 			<view class="listTopRight">
 				<view class="list_title">
@@ -44,38 +44,37 @@
 		</view> -->
 	</view>
 </template>
-
 <script>
 	export default {
-	  name: 'LikeFx',
-	  data() {
-	    return {
-	      queue: {},
-	      ctx: null,
-	      timer: 0,
-		  workType:['力工','技工','','其他'],
-		  workTypeImgs:["../../static/ligong.png","../../static/jigong.png","","../../static/qita.png"]
-	    }
-	  },
-	  props: {
-	    list: Object,
-	  },
-	  mounted() {
-		  console.log('list',this.list)
-	  },
-	  methods:{
-		  makeCall(phoneCode){
-		  	uni.makePhoneCall({ 
-		  		phoneNumber: phoneCode
-		  	});
-		  },
-		  goDetail(){
-			  this.$u.route({
-			  	url: 'pages/detail/companyDetail'
-			  })
-			  
-		  }
-	  }
+		name: 'LikeFx',
+		data() {
+			return {
+				queue: {},
+				ctx: null,
+				timer: 0,
+				workType:['力工','技工','','其他'],
+				workTypeImgs:["../../static/ligong.png","../../static/jigong.png","","../../static/qita.png"]
+			}
+		},
+		props: {
+			list: Object,
+		},
+		mounted() {
+			console.log('list',this.list)
+		},
+		methods:{
+			makeCall(phoneCode){
+				uni.makePhoneCall({ 
+					phoneNumber: phoneCode
+				});
+			},
+			goDetail(){
+				this.$u.route({
+					url: 'pages/detail/companyDetail',
+					id: 'company_provide'
+				})
+			}
+		}
 	}
 </script>
 

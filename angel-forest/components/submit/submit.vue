@@ -5,8 +5,8 @@
 				<view class="bt-img" @tap="records">
 					<image :src="toc"></image>
 				</view>
-				<!-- 文本框 -->
-				<textarea auto-height="true" class="chat-send btn" :class="{displaynone:isrecord}" @input="inputs"
+				<!-- 文本框@input="inputs" -->
+				<textarea auto-height="true" class="chat-send btn" :class="{displaynone:isrecord}" 
 					@focus="focus" v-model="msg"></textarea>
 				<view class="record btn" :class="{displaynone:!isrecord}" @touchstart="touchstart" @touchend="touchend"
 					@touchmove="touchmove">
@@ -16,7 +16,7 @@
 					<image :src="toc"></image>
 				</view>
 				<view class="bt-img" @tap="more">
-					<image :src="toc"></image>
+					<image src="../../static/img/chat/send.png"></image>
 				</view>
 			</view>
 			<!-- 表情 -->
@@ -82,7 +82,8 @@
 				// 直接引用地址可能出不来，需要用require
 				toc: 'http://demo.rageframe.com/attachment/images/2021/11/02/image_1635838346_MH3eD7HX.jpeg',//require('../../static/icon/allorder.png'),
 				timer: '', //计时器
-				vlength: 0
+				vlength: 0,
+				// send: './static/img/chat/'
 			};
 		},
 		components: {

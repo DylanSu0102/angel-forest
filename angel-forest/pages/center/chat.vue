@@ -66,6 +66,7 @@
 </template>
 
 <script>
+	import store from "../../store";
 	import dateTime from './dateTime.js';
 	import submit from '../../components/submit/submit.vue';
 	//音频播放
@@ -210,31 +211,43 @@
 			}
 		},
 		onShow() {
-			// 数组倒叙 主要是应对后端传过来的数据
-			for (var i = 0; i < this.msg.length; i++) {
-				//时间间隔处理
-				if (i < this.msg.length - 1) { //这里表示头部时间还是显示一下
-					let t = dateTime.spaceTime(this.oldTime, this.msg[i].createTime);
-					if (t) {
-						this.oldTime = t;
-					}
-					this.msg[i].createTime = t;
-				}
-				// 获取图片，为下面的预览做准备
-				if (this.msg[i].TextType == 1) {
-					this.imgMsg.unshift(this.msg[i].sendText)
-				}
-				this.unshiftmsg.unshift(this.msg[i]);
-			}
-			// 跳转到最后一条数据 与前面的:id进行对照
-			this.$nextTick(function() {
-				this.scrollToView = 'msg' + (this.unshiftmsg.length - 1)
-			})
+			console.log("$router",this.$route.query)
+			this.contactsListFun(this.$route.query)
+			// // 数组倒叙 主要是应对后端传过来的数据
+			// for (var i = 0; i < this.msg.length; i++) {
+			// 	//时间间隔处理
+			// 	if (i < this.msg.length - 1) { //这里表示头部时间还是显示一下
+			// 		let t = dateTime.spaceTime(this.oldTime, this.msg[i].createTime);
+			// 		if (t) {
+			// 			this.oldTime = t;
+			// 		}
+			// 		this.msg[i].createTime = t;
+			// 	}
+			// 	// 获取图片，为下面的预览做准备
+			// 	if (this.msg[i].TextType == 1) {
+			// 		this.imgMsg.unshift(this.msg[i].sendText)
+			// 	}
+			// 	this.unshiftmsg.unshift(this.msg[i]);
+			// }
+			// // 跳转到最后一条数据 与前面的:id进行对照
+			// this.$nextTick(function() {
+			// 	this.scrollToView = 'msg' + (this.unshiftmsg.length - 1)
+			// })
 		},
 		components: {
 			submit,
 		},
 		methods: {
+			contactsListFun(params){
+				console.log('this.$store.state',this.$store.state)
+				console.log('store',store.state)
+				var _this = this;
+				this.$u.get(`/im/messageList?pageNum=1&pageSize=10&fromUserId=${params.fromUserId}&toUserId=${this.$store.state.vuex_user}`, {}).then(result => {
+					console.log('result',result);
+					result.rows.map(function(m){m.createTime = _this.formatDate(m.createTime)})
+					this.contactsList = result.rows;
+				})
+			},
 			changeTime(date) {
 				return dateTime.dateTime1(date);
 			},

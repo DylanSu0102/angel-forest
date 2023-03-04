@@ -52,6 +52,7 @@
 </template>
 
 <script>
+	import store from "../../store";
 	import list from '@/components/list/list.vue' 
 	export default {
 		components: {
@@ -132,11 +133,12 @@
 			}
 		},
 		onLoad() {
+			console.log('store.state.token',this.$store.state.token)
 			this.rewardListFun(0)
 		},
 		onUnload() {
 			// 移除监听事件  
-			uni.$off('findIndexHouseList');
+			// uni.$off('findIndexHouseList');
 		},
 		onShow(){
 			// 检测升级
@@ -257,7 +259,6 @@
 			rewardListFunAll(type){
 				let pageNum = 1;
 				let pageSize = 10;
-				// '
 				this.$u.post(`/reward/list?pageNum=${pageNum}&pageSize=${pageSize}`, {
 					type: type,
 				}).then(result => {

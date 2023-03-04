@@ -120,6 +120,7 @@ class Request {
 	constructor() {
 		this.config = {
 			baseUrl: '', // 请求的根域名
+			filesUrl: '', // 文件资源根域名
 			// 默认的请求头
 			header: {},
 			method: 'POST',

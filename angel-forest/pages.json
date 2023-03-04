@@ -4,6 +4,15 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path" : "pages/login/login",
+			"style" :                                                                                    
+			{
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+				"navigationBarTitleText": "密码登录",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
@@ -47,20 +56,11 @@
 			}
 		},
 		{
-            "path" : "pages/login/login",
-            "style" :                                                                                    
-            {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-                "navigationBarTitleText": "密码登录",
-                "enablePullDownRefresh": false
-            }
-        },
-		{
-		    "path" : "pages/login/code",
+		    "path" : "pages/login/findCode",
 		    "style" :                                                                                    
 		    {
 				// "navigationStyle": "custom" ,// 隐藏系统导航栏
-		        "navigationBarTitleText": "获取验证码",
+		        "navigationBarTitleText": "找回密码",
 		        "enablePullDownRefresh": false
 		    }
 		},
@@ -131,6 +131,15 @@
 		    {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
 		        "navigationBarTitleText": "赏金列表",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
+		    "path" : "pages/center/meMeans",
+		    "style" :                                                                                    
+		    {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+		        "navigationBarTitleText": "个人信息",
 		        "enablePullDownRefresh": false
 		    }
 		}

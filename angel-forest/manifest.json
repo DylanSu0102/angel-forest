@@ -123,8 +123,8 @@
             "mode" : "hash",
             "base" : "/angel/"
         },
-        "title" : "天使VIP",
-        "domain" : "8.136.213.245",
+        "title" : "天使森林",
+        "domain" : "8.210.126.36:8080",
         "sdkConfigs" : {
             "maps" : {}
         }

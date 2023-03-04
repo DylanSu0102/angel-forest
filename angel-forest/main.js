@@ -29,4 +29,8 @@ Vue.use(httpInterceptor, app);
 import $mytip from 'common/tip.js'
 Vue.prototype.$mytip = $mytip
 
+//全局文件服务器站点路径
+Vue.prototype.filesServiceUrl = "http://8.210.126.36:8008/";
+
+
 app.$mount()

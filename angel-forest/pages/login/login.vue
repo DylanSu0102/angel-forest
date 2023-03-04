@@ -23,7 +23,7 @@
 						<view class="demo-layout bg-purple buleColor" @click="reg()">注册新用户</view>
 					</u-col>
 					<u-col class="regOrPwd" span="6" text-align="center">
-						<view class="demo-layout bg-purple-light buleColor">找回密码</view>
+						<view class="demo-layout bg-purple-light buleColor" @click="findCode()">找回密码</view>
 					</u-col>
 				</u-row>
 				<view class='otherMethod'>其他登录方式</view>
@@ -78,8 +78,9 @@ export default {
 				password: this.form.password
 			}).then(data => {
 				// 登录成功初始化token与用户信息
-				this.$u.vuex('vuex_token', data.token);
-				this.$u.vuex('vuex_user', data.loginUser);
+				console.log('data',data)
+				this.$u.vuex('vuex_token', data.data.token);
+				this.$u.vuex('vuex_user', data.data.userId);
 				uni.switchTab({
 					url: '/pages/index/index'
 				})
@@ -88,6 +89,11 @@ export default {
 		reg(){
 			this.$u.route({
 				url: 'pages/login/register'
+			})
+		},
+		findCode(){
+			this.$u.route({
+				url: 'pages/login/findCode'
 			})
 		}
 	}

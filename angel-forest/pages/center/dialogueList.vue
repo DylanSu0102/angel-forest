@@ -82,6 +82,10 @@
 			},
 			navToDetailPage(item){
 				console.log("item",item)
+				this.$u.route({
+					url: 'pages/center/chat',
+					params: {...item}
+				})
 			},
 			contactsListFun(){
 				var _this = this;

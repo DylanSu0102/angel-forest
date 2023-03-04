@@ -5,11 +5,11 @@
 		<view class="list">
 			<view class="listTop">
 				<view>
-					<u-avatar :src="src" mode="circle" size="120"></u-avatar>
+					<u-avatar :src="avatarUrl" mode="circle" size="120"></u-avatar>
 				</view>
 				<view class="listTopRight">
 					<view class="list_title">
-						<text style="font-size:25rpx;font-weight:normal">张三</text>
+						<text style="font-size:25rpx;font-weight:normal">{{this.nickName}}</text>
 					</view>
 					<view class="list_phone">
 						<text style="font-size:25rpx;color:#999999">18518575259</text>
@@ -30,7 +30,7 @@
 			</u-col>
 		</u-row>
 		<u-cell-group>
-			<u-cell-item icon="home" title="个人主页" :arrow="true"></u-cell-item>
+			<u-cell-item icon="home" title="个人信息" :arrow="true" @click="goMeMeansPag()"></u-cell-item>
 			<u-cell-item icon="rmb-circle" title="我的资产" :arrow="true"></u-cell-item>
 			<u-cell-item icon="bookmark" title="天使联盟" :arrow="true"></u-cell-item>
 			<u-cell-item icon="checkmark-circle" title="我的发布" :arrow="true"></u-cell-item>
@@ -46,11 +46,28 @@
 export default {
 	data() {
 		return {
-			avatarSrc: 'http://pic2.sc.chinaz.com/Files/pic/pic9/202002/hpic2119_s.jpg',
-			title: '素胚勾勒出青花，笔锋浓转淡',
-			subTitle: '2020-05-15',
-			thumb: 'http://pic2.sc.chinaz.com/Files/pic/pic9/202002/hpic2119_s.jpg',
+			avatarUrl: '',
+			nickName:'',
+			phone:'',
 		};
+	},
+	onLoad() {
+		this.userInfoFun()
+	},
+	methods: {
+		userInfoFun(){
+			let _this = this;
+			this.$u.get(`/user/1080635285304266752`, {}).then(result => {
+				console.log('result',result);
+				let userInfo = result.data;
+				this.avatarUrl = userInfo.avatarUrl;
+				this.nickName = userInfo.nickName;
+				this.phone = userInfo.phone;
+			})
+		},
+		goMeMeansPag(){
+			this.$u.route('/pages/center/meMeans');
+		}
 	}
 };
 </script>

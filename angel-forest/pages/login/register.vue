@@ -20,7 +20,7 @@
 					<u-form-item left-icon="email" :leftIconStyle="{color: '#cccccc', fontSize: '35rpx'}" :border-bottom="false">
 						<u-input v-model="form.email" type="email" placeholder="请输入邮箱地址"/>
 					</u-form-item>
-					<u-form-item left-icon="edit-pen" :leftIconStyle="{color: '#cccccc', fontSize: '35rpx'}">
+					<u-form-item left-icon="edit-pen" :leftIconStyle="{color: '#cccccc', fontSize: '35rpx'}" :border-bottom="false">
 						<u-input v-model="form.code" name="code" maxlength="4" placeholder="请输入邮箱验证码" />
 						<!-- <u-button slot="right" class="yanzheng" @click="verificationCode">发送验证码</u-button> -->
 						
@@ -43,30 +43,13 @@
 					</view>
 					<view class="MaT">
 						<u-checkbox-group > 
-							<u-checkbox label="item.name" v-model="form.xieyi" >同意《<span @click="goUserAgreement" style="color:#2796f4">用户服务协议</span>》</u-checkbox>
+							<u-checkbox label="item.name" v-model="xieyi" >同意《<span @click="goUserAgreement" style="color:#2796f4">用户服务协议</span>》</u-checkbox>
 						</u-checkbox-group>
 					</view>
 					<u-button class="registerBtn" @click="submit" >注册</u-button>
 				</u-form>
 			</view>
 		</view>
-		<!--<view class="content">
-			<view class="title">欢迎登录</view>
-			<input class="u-border-bottom" type="number" v-model="loginName" placeholder="请输入手机号" />
-			<view class="tips">未注册的手机号验证后自动创建账号</view>
-			<u-button @tap="submit" :style="[inputStyle]" class="getCaptcha">获取短信验证码</u-button>
-			<view class="alternative">
-				<view class="account" @click="accountLogin">密码登录</view>
-				<view class="issue" @click="problem">遇到问题</view>
-			</view>
-		</view>
-		<view class="buttom">
-			<view class="loginType">
-				<view class="wechat item">
-					<view class="icon"><u-icon size="60" name="server-man" color="#999" @click="server"></u-icon></view>
-				</view>
-			</view>
-		</view> -->
 	</view>
 </template>
 
@@ -85,8 +68,9 @@ export default {
 				password: '',
 				//secondPass: '',
 				radio:'',
-				xieyi: false,
+				// xieyi: false,
 			},
+			xieyi: false,
 			radioList:[
 				{
 					name: '是',
@@ -264,46 +248,7 @@ export default {
 			margin-bottom: 60rpx;
 			margin-top: 8rpx;
 		}
-		.getCaptcha {
-			background-color: rgba(0, 0, 0,.1);
-			color: $u-tips-color;
-			border: none;
-			font-size: 30rpx;
-			padding: 12rpx 0;
-			
-			&::after {
-				border: none;
-			}
-		}
-		.alternative {
-			color: $u-tips-color;
-			display: flex;
-			justify-content: space-between;
-			margin-top: 30rpx;
-			.account {
-				&:active{
-					background-color: #ededed;
-				}
-			}
-		}
 	}
-	.buttom {
-		.loginType {
-			font-size: 14px;
-			position: fixed;
-			right: 50rpx;
-			bottom: 50rpx;
-			width: 60px;
-			height: 60px;
-			padding: 4px;
-			cursor: pointer;
-			background: #FFF;
-			text-align: center;
-			line-height: 60px;
-			border-radius: 100%;
-			-webkit-box-shadow: 0px 1px 20px 0px rgba(0,0,0,0.1),inset 0px -1px 0px 0px rgba(0,0,0,0.1);
-			box-shadow: 0px 1px 20px 0px rgba(0,0,0,0.1),inset 0px -1px 0px 0px rgba(0,0,0,0.1);
-		}
-	}
+	
 }
 </style>
